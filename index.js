@@ -2,12 +2,18 @@ import Alumno from "./src/models/alumno.js";
 import {sumar, restar, multiplicar, dividir} from "./src/modules/matematica.js";
 import {OMDBSearchByPage,OMDBSearchComplete, OMDBGetByImdbID} from "./src/modules/wrapper.js";
 
+const alumnosArray = [];
+alumnosArray.push(new Alumno("Esteban Dido" , "22888444", 20));
+alumnosArray.push(new Alumno("Matias Queroso", "28946255", 51));
+alumnosArray.push(new Alumno("Elba Calao" , "32623391", 18));
+
 import express, { query } from "express";
 import cors from "cors";
 const app = express();
 const port = 3000;
 app.use(cors());
 app.use(express.json());
+
 
 //Endpoints
 app.get('/', (req, res) => {
@@ -64,12 +70,29 @@ app.get('/omdb/searchcomplete', async (req, res) => {
 })
 
 app.get('/omdb/getbyomdbid/', async (req, res) => {
-    const result = await OMDBGetByImdbID(req.query.imdbID);
+    const result = await OMDBGetByImdbID(req.query.imdbid);
     res.status(200).send(result);
 })
 
+app.get('/alumnos', (req, res) => {
+    const result = alumnosArray;
+    res.status(200).send(result);
+})
+
+app.get('/alumnos/:dni', (req, res) => {
+    const result = alumnosArray.find(({ DNI }) => DNI === req.params.dni);
+    res.status(200).send(result);
+})
+
+app.post('/alumno', (req, res) => {
+    let alumno = new Alumno(req.body.username, req.body.DNI, req.body.edad);
+    let a = req.body;
+    console.log(a);
+    //alumnosArragiy.push(new Alumno(alumno));
+    res.status(201).send(alumno);
+})
 
 //Inicio del servidor
 app.listen(port, () => {
-console.log(`Example app listening on port ${port}`)
+console.log(`App iniciada en el puerto: ${port}`)
 })
