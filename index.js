@@ -85,22 +85,22 @@ app.get('/alumnos/:dni', (req, res) => {
 })
 
 app.post('/alumnos', (req, res) => {
-    let alumno = new Alumno(req.body.username, req.body.DNI, req.body.edad);
-    let a = req.body;
-    console.log(a);
-    alumnosArray.push(new Alumno(alumno));
+    let alumno = new Alumno(req.body.username, req.body.DNI, req.body.edad);    
+    alumnosArray.push(alumno);
     res.status(201).send(alumnosArray);
 })
 
-app.delete('/alumnos', (req, res) => {
+app.delete('/alumnos/delete', (req, res) => {
     let alumno = new Alumno(req.body.username, req.body.DNI, req.body.edad);
-    let a = req.body;
-    encontrado = true;
-    while(encontrado != false){
-        alumnosArray[i] = alumno;
+    let encontrado = false;
+    let i = 0;
+    while(encontrado == false){
+        if (alumnosArray[i].DNI == alumno.DNI) {
+            encontrado = true;
+            alumnosArray.splice(i, 1);
+        }
         i++;
     }
-    alumnosArray.splice(i, 1);
     res.status(201).send(alumnosArray);
 })
 
